@@ -23,10 +23,13 @@ class GrafoEmLista:
         print("Conjunto de arestas do grafo:", self.arestas)
 
     def imprime_grau(self, vertice):
-        print(f"Grau do vértice {vertice}: {len(self.lista[vertice])}")
-
+        grau = len(self.lista[vertice])
+        if vertice in self.lista[vertice]:
+            grau += 1
+        print(f"Grau do vértice {vertice}: {grau}")
 
 grafo = GrafoEmLista(4)
+grafo.adiciona_aresta(2, 2)
 grafo.adiciona_aresta(2, 3)
 grafo.adiciona_aresta(1, 2)
 grafo.adiciona_aresta(0, 2)

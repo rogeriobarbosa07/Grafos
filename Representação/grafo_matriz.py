@@ -21,7 +21,9 @@ class GrafoEmMatriz:
     def imprime_grau(self, vertice):
         grau = 0
         for i in range(self.numero_vertices):
-            if self.matriz[vertice][i] == 1 and i != vertice:
+            if self.matriz[vertice][i] == 1:
+                if i == vertice:
+                    grau += 1
                 grau += 1
         print(f"Grau do vértice {vertice}: {grau}")
     
