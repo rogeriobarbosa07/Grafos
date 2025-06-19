@@ -34,7 +34,7 @@ class GrafoEmMatriz:
             matriz[vertice][i] = 0
             matriz[i][vertice] = 0
 
-    def inicia_DFS(self, vertice):
+    def DFS(self, vertice):
         self.matriz_copia = copy.deepcopy(self.matriz)
 
         self.cor = ['b'] * self.numero_vertices
@@ -46,23 +46,24 @@ class GrafoEmMatriz:
         self.d[vertice] = 1
 
         for i in range(self.numero_vertices):
-            if i != 0:
-                self.DFS(vertice, i)
-                break
+            if self.matriz_copia[vertice][i] != 0:
+                self.DFS_visita(vertice, i)
 
-    def DFS(self, v_anterior, v_atual):
-        self.pi[v_atual] = 'c'
+    def DFS_visita(self, v_anterior, v_atual):
+        self.remove_vertice(self.matriz_copia, v_anterior)
+
+        self.cor[v_atual] = 'c'
         self.pi[v_atual] = v_anterior
-        self.d[v_atual] = max(self.d, self.f)
+        self.d[v_atual] = max(max(self.d), max(self.f)) + 1
 
         if max(self.matriz_copia[v_atual]) == 0:
-            self.f[v_atual] = max(self.d, self.f) + 1
+            self.f[v_atual] = max(max(self.d), max(self.f)) + 1
             self.cor[v_atual] = 'p'
         else:
             for i in range(self.numero_vertices):
-                if i == 1:
-                    self.DFS(v_atual, i)
-                    self.f[v_atual] = max(self.d, self.f) + 1
+                if self.matriz_copia[v_atual][i] != 0:
+                    self.DFS_visita(v_atual, i)
+                    self.f[v_atual] = max(max(self.d), max(self.f)) + 1
                     self.cor[v_atual] = 'p'
 
 grafo = GrafoEmMatriz(5)
@@ -76,4 +77,4 @@ grafo.adiciona_aresta(4, 1)
 grafo.adiciona_aresta(4, 2)
 grafo.adiciona_aresta(4, 4)
 grafo.imprime_matriz()
-grafo.imprime_arestas()
+grafo.DFS(3)
