@@ -29,10 +29,12 @@ class GrafoEmMatriz:
                 grau += 1
         print(f"Grau do vértice {vertice}: {grau}")
 
-    def remove_vertice(self, matriz, vertice):
-        for i in range(self.numero_vertices):
-            matriz[vertice][i] = 0
-            matriz[i][vertice] = 0
+    def remove_aresta(self, vertice1, vertice2):
+        self.matriz_copia[vertice1][vertice2] = 0
+        self.matriz_copia[vertice2][vertice1] = 0
+
+    def imprime_visitado(self, vertice):
+        print(f"\nDFS({vertice}):\ncor[{vertice}] = {self.cor[vertice]}\npi[{vertice}] = {self.pi[vertice]}\nd[{vertice}] = {self.d[vertice]}\nf[{vertice}] = {self.f[vertice]}")
 
     def DFS(self, vertice):
         self.matriz_copia = copy.deepcopy(self.matriz)
@@ -44,27 +46,38 @@ class GrafoEmMatriz:
 
         self.cor[vertice] = 'c'
         self.d[vertice] = 1
-
+        
+        # Trecho mais importante: loop de execução do DFS
         for i in range(self.numero_vertices):
-            if self.matriz_copia[vertice][i] != 0:
+            if self.matriz_copia[vertice][i] != 0 and self.cor[i] == 'b':
+                self.imprime_visitado(vertice)
                 self.DFS_visita(vertice, i)
 
+        self.cor[vertice] = 'c'
+        self.f[vertice] = max(max(self.d), max(self.f)) + 1
+
+        self.imprime_visitado(vertice)
+
     def DFS_visita(self, v_anterior, v_atual):
-        self.remove_vertice(self.matriz_copia, v_anterior)
+        self.remove_aresta(v_anterior, v_atual)
 
         self.cor[v_atual] = 'c'
         self.pi[v_atual] = v_anterior
         self.d[v_atual] = max(max(self.d), max(self.f)) + 1
 
+        self.imprime_visitado(v_atual)
+
         if max(self.matriz_copia[v_atual]) == 0:
             self.f[v_atual] = max(max(self.d), max(self.f)) + 1
             self.cor[v_atual] = 'p'
+            self.imprime_visitado(v_atual)
         else:
             for i in range(self.numero_vertices):
-                if self.matriz_copia[v_atual][i] != 0:
+                if self.matriz_copia[v_atual][i] != 0 and self.cor[i] == 'b':
                     self.DFS_visita(v_atual, i)
                     self.f[v_atual] = max(max(self.d), max(self.f)) + 1
                     self.cor[v_atual] = 'p'
+                    self.imprime_visitado(v_atual)
 
 grafo = GrafoEmMatriz(5)
 grafo.adiciona_aresta(0, 2)
