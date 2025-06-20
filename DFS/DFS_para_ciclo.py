@@ -73,7 +73,10 @@ class GrafoEmMatriz:
             self.imprime_visitado(v_atual)
         else:
             for i in range(self.numero_vertices):
-                if self.matriz_copia[v_atual][i] != 0 and self.cor[i] == 'b':
+                if self.matriz_copia[v_atual][i] != 0 and self.cor[i] in ('c', 'p'):
+                    print("Ciclo encontrado!")
+                    break
+                elif self.matriz_copia[v_atual][i] != 0 and self.cor[i] == 'b':
                     self.DFS_visita(v_atual, i)
                     self.f[v_atual] = max(max(self.d), max(self.f)) + 1
                     self.cor[v_atual] = 'p'
