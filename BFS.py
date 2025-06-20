@@ -33,6 +33,20 @@ class GrafoEmMatriz:
         self.matriz_copia[vertice1][vertice2] = 0
         self.matriz_copia[vertice2][vertice1] = 0
 
+    def fila_para_lista(self):
+        lista = []
+        temporario = queue.Queue()
+
+        while not self.fila.empty():
+            item = self.fila.get()
+            lista.append(item)
+            temporario.put(item)
+
+        while not temporario.empty():
+            self.fila.put(temporario.get())
+
+        return lista
+
     def imprime_visitado(self, vertice):
         print(f"\nBFS({vertice}):\ncor[{vertice}] = {self.cor[vertice]}\npi[{vertice}] = {self.pi[vertice]}\nd[{vertice}] = {self.d[vertice]}")
 
@@ -46,25 +60,29 @@ class GrafoEmMatriz:
 
         self.cor[vertice] = 'c'
         self.fila.put(vertice)
-
-        self.imprime_visitado(vertice)
+        
+        print(f"\nfila = {self.fila_para_lista()}")
 
         while not self.fila.empty():
             for i in range(self.numero_vertices):
                 if self.matriz_copia[vertice][i] == 1 and self.cor[i] == 'b':
                     self.cor[i] = 'c'
+                    self.pi[i] = vertice
                     self.d[i] = self.d[vertice] + 1
-                    self.fila.put(vertice)
-                    self.imprime_visitado(i)
+                    self.fila.put(i)
                     self.remove_aresta(vertice, i)
-            self.fila.get()
+
+            vertice = self.fila.get()
+            self.imprime_visitado(vertice)
+
+            print(f"fila = {self.fila_para_lista()}")
     
 grafo = GrafoEmMatriz(4)
-grafo.adiciona_aresta(0, 1)
 grafo.adiciona_aresta(0, 2)
 grafo.adiciona_aresta(1, 2)
 grafo.adiciona_aresta(2, 2)
 grafo.adiciona_aresta(2, 3)
+grafo.adiciona_aresta(3, 0)
 grafo.adiciona_aresta(3, 1)
 grafo.imprime_matriz()
 grafo.BFS(1)
