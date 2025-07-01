@@ -70,6 +70,7 @@ class GrafoEmMatriz:
                     self.pi[i] = vertice
                     self.d[i] = self.d[vertice] + 1
                     self.fila.put(i)
+                    print(f"\nfila = {self.fila_para_lista()}")
                     self.remove_aresta(vertice, i)
 
             vertice = self.fila.get()
