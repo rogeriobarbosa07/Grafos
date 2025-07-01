@@ -73,6 +73,11 @@ class GrafoEmMatriz:
         caminho_encontrado = False
 
         while not self.fila.empty():
+            if vertice == final:
+                print(f"\nCaminho encontrado: {self.caminho(final)}\nTamanho do caminho: {self.pi[vertice]}")
+                caminho_encontrado = True
+                break
+
             for i in range(self.numero_vertices):
                 if self.matriz_copia[vertice][i] == 1 and self.cor[i] == 'b':
                     self.cor[i] = 'c'
@@ -81,13 +86,6 @@ class GrafoEmMatriz:
                     self.fila.put(i)
                     print(f"\nfila = {self.fila_para_lista()}")
                     self.remove_aresta(vertice, i)
-
-                if i == final:
-                    print(f"\nCaminho encontrado: {self.caminho(final)}")
-                    caminho_encontrado = True
-                    break
-            if caminho_encontrado:
-                break
 
             vertice = self.fila.get()
             self.imprime_visitado(vertice)
