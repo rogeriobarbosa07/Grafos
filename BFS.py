@@ -50,7 +50,14 @@ class GrafoEmMatriz:
     def imprime_visitado(self, vertice):
         print(f"\nBFS({vertice}):\ncor[{vertice}] = {self.cor[vertice]}\npi[{vertice}] = {self.pi[vertice]}\nd[{vertice}] = {self.d[vertice]}")
 
-    def BFS(self, vertice):
+    def caminho(self, vertice):
+        caminho = [vertice]
+        while self.pi[vertice] != None:
+            caminho.insert(0, self.pi[vertice])
+            vertice = self.pi[vertice]
+        return caminho
+
+    def BFS(self, vertice, final):
         self.matriz_copia = copy.deepcopy(self.matriz)
 
         self.cor = ['b'] * self.numero_vertices
@@ -63,6 +70,8 @@ class GrafoEmMatriz:
         
         print(f"\nfila = {self.fila_para_lista()}")
 
+        caminho_encontrado = False
+
         while not self.fila.empty():
             for i in range(self.numero_vertices):
                 if self.matriz_copia[vertice][i] == 1 and self.cor[i] == 'b':
@@ -73,17 +82,29 @@ class GrafoEmMatriz:
                     print(f"\nfila = {self.fila_para_lista()}")
                     self.remove_aresta(vertice, i)
 
+                if i == final:
+                    print(f"\nCaminho encontrado: {self.caminho(final)}")
+                    caminho_encontrado = True
+                    break
+            if caminho_encontrado:
+                break
+
             vertice = self.fila.get()
             self.imprime_visitado(vertice)
 
             print(f"fila = {self.fila_para_lista()}")
-    
-grafo = GrafoEmMatriz(4)
-grafo.adiciona_aresta(0, 2)
-grafo.adiciona_aresta(1, 2)
-grafo.adiciona_aresta(2, 2)
-grafo.adiciona_aresta(2, 3)
-grafo.adiciona_aresta(3, 0)
-grafo.adiciona_aresta(3, 1)
-grafo.imprime_matriz()
-grafo.BFS(1)
+
+if __name__ == '__main__':
+    grafo = GrafoEmMatriz(4)
+    grafo.adiciona_aresta(0, 2)
+    grafo.adiciona_aresta(1, 2)
+    grafo.adiciona_aresta(2, 2)
+    grafo.adiciona_aresta(2, 3)
+    grafo.adiciona_aresta(3, 0)
+    grafo.adiciona_aresta(3, 1)
+    grafo.imprime_matriz()
+
+    v_inicial = int(input('\nInforme o vértice inicial: '))
+    v_final = int(input('Informe o vértice para ser o final do caminho: '))
+
+    grafo.BFS(v_inicial, v_final)
