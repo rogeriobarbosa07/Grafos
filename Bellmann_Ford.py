@@ -1,3 +1,9 @@
+'''
+IMPORTANTE: NA HORA DE ADICIONAR AS ARESTAS, NÃO COLOCAR O PESO SENDO ZERO, 
+POIS ISSO SERVE PARA DIZER À MATRIZ QUE NÃO TEM ARESTA NESSE PONTO!
+OS PESOS PODEM SER POSITIVOS OU NEGATIVOS, MAS NÃO PODEM SER IGUAIS A ZERO!
+'''
+
 import copy
 
 class GrafoEmMatriz:
@@ -27,36 +33,21 @@ class GrafoEmMatriz:
                 grau += 1
         print(f"Grau do vértice {vertice}: {grau}")
 
-    def bellmann_ford(self, inicial):
-        matriz_copia = copy.deepcopy(self.matriz)
-        atual = inicial
+    def bellman_ford(self, inicial):
+        dist = [float("inf")] * self.numero_vertices
+        dist[inicial] = 0
 
-        valores_vertices = [float('inf')] * self.numero_vertices
-        valores_vertices[inicial] = 0
+        for _ in range(self.numero_vertices - 1):
+            for u, v, peso in self.arestas:
+                if dist[u] != float("inf") and dist[u] + peso < dist[v]:
+                    dist[v] = dist[u] + peso
 
-        for i in range(self.numero_vertices - 1):
-            # acumulador: se baseia no peso atual do vértice para setar o valor dos próximos
-            peso_atual = valores_vertices[atual]
+        for u, v, peso in self.arestas:
+            if dist[u] != float("inf") and dist[u] + peso < dist[v]:
+                print("Grafo contém ciclo de peso negativo!")
+                return None
 
-            for j in range(self.numero_vertices):
-                if ((matriz_copia[atual][j] + peso_atual) < valores_vertices[j]) and matriz_copia[atual][j] != 0:
-                    valores_vertices[j] = matriz_copia[atual][j] + peso_atual
-
-            # escolhe quem tem o menor peso localmente para dar continuidade
-            aux_valores = copy.deepcopy(valores_vertices)
-            possiveis_posicoes = []
-            for a in range(self.numero_vertices):
-                if matriz_copia[atual][a] != 0:
-                    possiveis_posicoes.append(a)
-            menor_atual = min(aux_valores)
-            for k in range(self.numero_vertices):
-                if (aux_valores[k] == menor_atual) and (k in possiveis_posicoes):
-                    atual = k
-                else:
-                    aux_valores[k] = float('inf')
-                    menor_atual = min(aux_valores)
-
-        print(valores_vertices)
+        return dist
 
 grafo = GrafoEmMatriz(5)
 grafo.adiciona_aresta_peso(0, 1, 7)
@@ -71,4 +62,4 @@ grafo.adiciona_aresta_peso(4, 0, 2)
 grafo.adiciona_aresta_peso(4, 3, 7)
 
 grafo.imprime_matriz()
-grafo.bellmann_ford(0)
+grafo.bellman_ford(0)
