@@ -1,5 +1,3 @@
-import copy
-
 class GrafoEmMatriz:
     def __init__(self, numero_vertices):
         self.numero_vertices = numero_vertices
