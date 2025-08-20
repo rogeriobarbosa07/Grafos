@@ -42,15 +42,13 @@ class GrafoEmMatriz:
         print('\nMatriz depois:')
         self.imprime_matriz()        
     
-grafo = GrafoEmMatriz(5)
-grafo.adiciona_aresta_peso(0, 1, 7)
-grafo.adiciona_aresta_peso(0, 2, 6)
-grafo.adiciona_aresta_peso(1, 2, 8)
-grafo.adiciona_aresta_peso(1, 3, 5)
-grafo.adiciona_aresta_peso(1, 4, -4)
-grafo.adiciona_aresta_peso(2, 3, -3)
-grafo.adiciona_aresta_peso(2, 4, 9)
-grafo.adiciona_aresta_peso(3, 1, -2)
-grafo.adiciona_aresta_peso(4, 0, 2)
-grafo.adiciona_aresta_peso(4, 3, 7)
+grafo = GrafoEmMatriz(4)
+
+# Grafo do exercício em sala
+grafo.adiciona_aresta_peso(0, 2, 8)
+grafo.adiciona_aresta_peso(1, 0, 3)
+grafo.adiciona_aresta_peso(1, 2, 9)
+grafo.adiciona_aresta_peso(1, 3, 6)
+grafo.adiciona_aresta_peso(3, 0, 4)
+
 grafo.floyd_warshall()
